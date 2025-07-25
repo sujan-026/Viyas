@@ -160,7 +160,7 @@ const AboutPage = () => {
             <div className="w-full h-64">
               <iframe
                 title="shop-location"
-                src="https://www.google.com/maps?q=Suncity+Road,+Kengeri,+Bengaluru,+Karnataka,+India&output=embed"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1991132.2639051036!2d75.03667435625!3d12.912207500000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3f629912b787%3A0x4029a659c6f05ba3!2sViyas%20Connecting%20India!5e0!3m2!1sen!2sus!4v1753440267555!5m2!1sen!2sus" 
                 width="100%"
                 height="100%"
                 loading="lazy"

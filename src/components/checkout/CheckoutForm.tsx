@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -44,6 +45,7 @@ const formSchema = z.object({
 
 export function CheckoutForm() {
   const navigate = useNavigate();
+  const { getCartTotal, clearCart } = useCart();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,9 +53,48 @@ export function CheckoutForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    navigate("/order-success");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const orderAmount = getCartTotal() * 100;
+
+    const res = await fetch('/api/createOrder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: orderAmount,
+        currency: 'INR',
+        receipt: 'rcpt-' + Date.now(),
+      }),
+    });
+
+    const { id: order_id } = await res.json();
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: orderAmount,
+      currency: 'INR',
+      name: 'Viyas',
+      description: 'Test Transaction',
+      order_id,
+      prefill: {
+        name: values.fullName,
+        email: values.email,
+      },
+      handler: async (response: any) => {
+        await fetch('/api/verifyPayment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(response),
+        });
+        clearCart();
+        navigate('/order-success');
+      },
+      theme: {
+        color: '#3399cc',
+      },
+    } as any;
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
   }
 
   return (

@@ -63,8 +63,10 @@ const ProductsPage = () => {
     setPriceRange([value[0], value[1]]);
   };
 
-  const handleSortChange = (value: string) => {
-    setSortBy(value as any);
+  const handleSortChange = (
+    value: "featured" | "priceAsc" | "priceDesc" | "nameAsc" | "nameDesc" | "rating"
+  ) => {
+    setSortBy(value);
   };
 
   const applyFilters = (

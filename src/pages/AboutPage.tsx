@@ -153,6 +153,23 @@ const AboutPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Map Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">Find Us</h2>
+            <div className="w-full h-64">
+              <iframe
+                title="shop-location"
+                src="https://www.google.com/maps?q=Suncity+Road,+Kengeri,+Bengaluru,+Karnataka,+India&output=embed"
+                width="100%"
+                height="100%"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full border-0"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </MainLayout>

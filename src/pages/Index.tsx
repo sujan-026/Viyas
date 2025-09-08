@@ -20,7 +20,7 @@ const Index = () => {
               Experience Entertainment Like Never Before
             </h1>
             <p className="text-lg md:text-xl max-w-2xl text-gray-100">
-              Discover Viyas premium television technology with stunning picture quality from 24" to 75" screens.
+              Discover Viyas premium TV's with stunning picture quality from 24" to 75" screens.
             </p>
             <Button size="lg" variant="secondary" asChild>
               <Link to="/products">Explore TVs</Link>

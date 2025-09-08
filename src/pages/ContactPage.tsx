@@ -28,7 +28,7 @@ const ContactPage = () => {
                 <Mail className="h-5 w-5 text-shop-primary" />
                 <div>
                   <h3 className="font-medium">Email</h3>
-                  <p className="text-muted-foreground">support@viyas.com</p>
+                  <p className="text-muted-foreground">viyasconnectingindia@gmail.com</p>
                 </div>
               </div>
               
@@ -36,7 +36,7 @@ const ContactPage = () => {
                 <Phone className="h-5 w-5 text-shop-primary" />
                 <div>
                   <h3 className="font-medium">Phone</h3>
-                  <p className="text-muted-foreground">1-800-VIYAS-TV</p>
+                  <p className="text-muted-foreground">8088060841</p>
                 </div>
               </div>
               
@@ -44,7 +44,7 @@ const ContactPage = () => {
                 <MapPin className="h-5 w-5 text-shop-primary" />
                 <div>
                   <h3 className="font-medium">Address</h3>
-                  <p className="text-muted-foreground">123 TV Street, Entertainment City, EC 12345</p>
+                  <p className="text-muted-foreground">237, 5th Cross Rd, Suncity, BSM Extension, Satellite, Bengaluru, Karnataka 560060</p>
                 </div>
               </div>
             </div>

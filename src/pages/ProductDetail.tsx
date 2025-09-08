@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -6,27 +6,71 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { getProductById, products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 import { Heart, Minus, Plus, Share2, ShoppingCart, Star } from "lucide-react";
 import { ProductCard } from "@/components/products/ProductCard";
 
+import supabase from "../lib/supabaseClient";
+
+// The table name is "product" (from the image)
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = React.useState(1);
-  const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const product = getProductById(id || "");
+  const [product, setProduct] = useState<any | null>(null);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // formatter for Indian Rupees with lakhs/crores separators
-  const formatINR = (amount: number) =>
-    amount.toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      setError(null);
+
+      // Convert "prod-5" format to database ID format (extract number)
+      const dbId = id?.startsWith('prod-') ? id.replace('prod-', '') : id;
+
+      // Fetch the single product by id
+      const { data, error } = await supabase
+        .from("product")
+        .select("*")
+        .eq("id", dbId)
+        .single();
+
+      if (error) {
+        setError(error.message);
+        setProduct(null);
+      } else {
+        setProduct(data);
+      }
+      setLoading(false);
+    };
+
+    // Fetch all products for related products
+    const fetchAllProducts = async () => {
+      const { data, error } = await supabase.from("products").select("*");
+      if (!error && data) {
+        setAllProducts(data);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+      fetchAllProducts();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading product...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
   if (!product) {
     return (
@@ -41,6 +85,26 @@ const ProductDetail = () => {
       </MainLayout>
     );
   }
+
+  // formatter for Indian Rupees with lakhs/crores separators
+  const formatINR = (amount: number) =>
+    amount.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+  // Handle images: fallback to empty array if not present
+  const images: string[] = Array.isArray(product.images)
+    ? product.images
+    : typeof product.images === "string"
+    ? (() => {
+        try {
+          return JSON.parse(product.images);
+        } catch {
+          return [];
+        }
+      })()
+    : [];
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -63,8 +127,11 @@ const ProductDetail = () => {
     }
   };
 
-  const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+  // Related products: same category, not this product
+  const relatedProducts = allProducts
+    .filter(
+      (p) => p.category === product.category && p.id !== product.id
+    )
     .slice(0, 4);
 
   return (
@@ -74,15 +141,21 @@ const ProductDetail = () => {
           {/* Product Images */}
           <div className="space-y-4">
             <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-              <img
-                src={product.images[activeImageIndex]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+              {images.length > 0 ? (
+                <img
+                  src={images[activeImageIndex]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  No Image
+                </div>
+              )}
             </div>
-            {product.images.length > 1 && (
+            {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto py-2">
-                {product.images.map((image, index) => (
+                {images.map((image, index) => (
                   <button
                     key={index}
                     className={`relative w-20 h-20 rounded-md overflow-hidden ${
@@ -127,7 +200,7 @@ const ProductDetail = () => {
                     <Star
                       key={i}
                       className={`h-4 w-4 ${
-                        i < Math.floor(product.rating)
+                        i < Math.floor(product.rating || 0)
                           ? "text-yellow-500 fill-yellow-500"
                           : "text-gray-300"
                       }`}

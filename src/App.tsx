@@ -28,6 +28,7 @@ import FeaturedPage from "./pages/FeaturedPage";
 import WishlistPage from "./pages/WishlistPage";
 import AuthPage from "./pages/AuthPage";
 import { Analytics } from "@vercel/analytics/react";
+import TermsPage from "./pages/Terms";
 import API from "./pages/API";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/shipping" element={<ShippingPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
                 <Route path="/featured" element={<FeaturedPage />} />
                 <Route path="/auth" element={<AuthPage />} />
                 

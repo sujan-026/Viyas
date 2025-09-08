@@ -93,14 +93,14 @@ export function Footer() {
             © {new Date().getFullYear()} Viyas. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link to="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Terms
             </Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Privacy
             </Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Cookies
+            <Link to="/shipping" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Shipping & Returns
             </Link>
           </div>
         </div>

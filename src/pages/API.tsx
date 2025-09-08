@@ -12,7 +12,7 @@ function API() {
             setError(null);
 
             // console.log(supabase);
-            const { data, error } = await supabase.from("product").select();
+            const { data, error } = await supabase.from("products").select();
             console.log(data);
 
             if (error) {

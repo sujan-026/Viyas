@@ -28,6 +28,7 @@ import FeaturedPage from "./pages/FeaturedPage";
 import WishlistPage from "./pages/WishlistPage";
 import AuthPage from "./pages/AuthPage";
 import { Analytics } from "@vercel/analytics/react";
+import API from "./pages/API";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
+                <Route path="/api" element={<API />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/categories" element={<CategoriesPage />} />

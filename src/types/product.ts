@@ -9,8 +9,8 @@ export interface Product {
   rating: number;
   stock: number;
   featured?: boolean;
-  screenSize?: number; // Size in inches
-  resolution?: string; // e.g., "4K", "8K", "1080p"
-  smartFeatures?: string[]; // e.g., ["Netflix", "YouTube", "Voice Control"]
-  connectivity?: string[]; // e.g., ["HDMI", "USB", "Bluetooth"]
+  screenSize?: number; 
+  resolution?: string; 
+  smartFeatures?: string[]; 
+  connectivity?: string[]; 
 }
